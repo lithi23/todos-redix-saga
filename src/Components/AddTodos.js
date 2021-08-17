@@ -1,6 +1,7 @@
-import React,{useState} from 'react'
-import {useDispatch} from 'react-redux'
-import {addTodos} from './../redux-store/action'
+import React,{useState,useEffect} from 'react'
+import {useDispatch,useSelector} from 'react-redux'
+import {getTodos,addTodos} from './../redux-store/action'
+import TodoLists from './TodoLists'
 import './../App.css'
 
 
@@ -9,6 +10,14 @@ let AddTodo = () =>{
 
 let [inputs,setInputs] = useState({todo:"",label:""})
 let dispatch = useDispatch()
+
+const todos = useSelector((store)=>store.todos)
+
+useEffect(()=>{
+    dispatch(getTodos())
+},[dispatch])
+
+
 let handleOnChange = (e) =>{
   e.persist()  
   setInputs(inputs =>({...inputs,[e.target.name]:e.target.value}))
@@ -31,11 +40,15 @@ let handleSubmit = (e) =>{
   </div>
   <div className="form-group mx-sm-3 mb-2">
     <label  className="sr-only">Bucket</label>
-    <input type="text" className="form-control" id="inputLabel" placeholder="Enter a label to todo" onChange={handleOnChange} name="label"value ={inputs.label}/>
+    <input type="text" className="form-control" id="inputLabel" placeholder="Enter a label to todo" onChange={handleOnChange} name="label" value ={inputs.label}/>
   </div>
   <button type="submit" className="btn btn-primary mb-2">Save</button>
 </form>
+<div>
+<TodoLists todos={todos}/> 
+</div>
         </div>
+
     )
 }
 

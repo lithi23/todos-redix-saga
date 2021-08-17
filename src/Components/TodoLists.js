@@ -1,17 +1,8 @@
-import React,{useEffect} from 'react'
-import {useDispatch,useSelector} from 'react-redux'
-import {getTodos} from './../redux-store/action'
+import React from 'react'
 import Todo from './Todo'
 
-let TodoLists = () =>{
-    let dispatch =useDispatch()
-    const todos = useSelector((store)=>store.todos)
-    useEffect(()=>{
-        dispatch(getTodos())
-    },[dispatch])
-
-  
-  
+let TodoLists = (props) =>{  
+  let {todos}=props
     return(
         <div>
         <h1>Todo List</h1>

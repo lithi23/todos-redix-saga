@@ -5,6 +5,8 @@ export const UPDATE_TODOS = 'UPDATE_TODOS'
 const SET_ADD_TODOS='SET_ADD_TODOS'
 const SET_UPDATE_TODOS='SET_UPDATE_TODOS'
 const SET_TODOS='SET_TODOS'
+export const DELETE_TODOS  = 'DELETE_TODOS'
+const SET_DELETE_TODOS = 'SET_DELETE_TODOS'
 export const getTodos = () =>({
     type:GET_TODOS
 })
@@ -34,6 +36,16 @@ export const setAddTodos = (todos) =>({
     todos     
 })
 
+export const deleteTodos = (id) =>({
+    type:DELETE_TODOS,
+    id
+})
+export const setDeleteTodos = (id) =>({
+    type:SET_DELETE_TODOS,
+    id
+})
+
+
 let initialState={
     todos:[]
 }
@@ -44,9 +56,12 @@ let initialState={
         case SET_TODOS:
             return {...state,todos:action.todos}
         case SET_ADD_TODOS:
-            return {...state,todos:state.todos.unshift(action.todos)}
+            return {todos:state.todos.unshift(action.todos)}
         case SET_UPDATE_TODOS:
-            return{...state,todos:state.todos.map(todo=> {if(todo._id==action.todos._id) return todo=action.todos})}
+            return{...state,todos:state.todos.map(todo=> (todo._id===action.todos._id) ? action.todos : todo)}
+        case SET_DELETE_TODOS:
+            console.log("set del : " +action.id)
+            return {todos:state.todos.filter(todo=>todo._id!==action.id)}
             default:
                 return state
 
@@ -54,3 +69,7 @@ let initialState={
 }
 
 export default todoReducer
+
+
+
+//todos:state.todos.push(action.todos)

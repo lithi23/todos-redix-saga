@@ -1,6 +1,6 @@
 import { call,put } from "@redux-saga/core/effects";
-import {getTodosApi,addTodosApi,updateTodosApi} from '../Api'
-import {setTodos,setUpdateTodos,setAddTodos} from './action'
+import {getTodosApi} from '../Api'
+import {setTodos,setUpdateTodos,setAddTodos,setDeleteTodos} from './action'
 import Axios from 'axios'
 
 export function* handleGetTodos(){
@@ -31,11 +31,26 @@ console.log("addtodos e " + e)
 
 export function* handleUpdateTodos(action){
     try{
-    const response = yield call(updateTodosApi(action.todos))
+        console.log(" setupdates "+ JSON.stringify(action.todos))
+    const response = yield call(Axios.put,"http://localhost:8001/updateTodo",action.todos)
     let {data} = response
     yield put(setUpdateTodos(data))
     }
     catch(e){
         console.log(e)
     }
+}
+
+export function* handleDeleteTodos(action){
+try{
+    console.log("inside del handler" + JSON.stringify(action.id))
+const response  = yield call(Axios.delete,"http://localhost:8001/deleteTodos/"+action.id)
+let {data} = response
+console.log("handler log del : " +JSON.stringify(data))
+if(data.deletedCount===1)
+yield put (setDeleteTodos(action.id))
+}
+catch(e){
+    console.log(e)
+}
 }
